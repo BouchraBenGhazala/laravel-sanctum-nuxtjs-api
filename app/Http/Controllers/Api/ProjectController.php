@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 use App\Models\Projet;
 class ProjectController extends Controller
 {
@@ -35,6 +35,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        return response()->json(['message' => 'Project created successfully']);
         try {
             $project = Projet::create($request->all());
             $project->save();

@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Api\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,11 @@ Route::get('/user', [AuthController::class, 'me'])->middleware('auth:sanctum');
 
 
 Route::get('/projets',[ProjectController::class,'index'] );
-Route::post('/projets',[ProjectController::class,'store'] );
+Route::post('/projets', function (Request $request) {
+    return $request;
+})->middleware('auth:sanctum');
 Route::put('/projets/{id}',[ProjectController::class,'update'] );
 Route::delete('/projets/{id}',[ProjectController::class,'delete'] );
+
+Route::post('/login',[AuthController::class,'login'] );
+Route::post('/logout',[AuthController::class,'logout'] );
