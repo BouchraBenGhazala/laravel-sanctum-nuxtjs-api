@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Projet;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class ProjectController extends Controller
+
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-  
     public function index()
     {
-        $project=Projet::all();
-        if($project->count()>0){
+        $task=Task::all();
+        if($task->count()>0){
             return response()->json([
                 'status'=>200,
-                'message'=>$project
-
+                'message'=>$task
             ],200);
         }else{
             return response()->json([
@@ -35,7 +34,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return response()->json(['message' => 'Open form to create a new project']);
+        return response()->json(['message' => 'Open form to create a new task']);
+
     }
 
     /**
@@ -46,9 +46,9 @@ class ProjectController extends Controller
         $validator=Validator::make($request->all(),[
             'title'=>'required|string|max:191',
             'description'=>'required|string|max:191',
-            'slug'=>'required|string|max:191',
-            'status'=>'required|string|max:191',
-            'url'=>'required|string|max:191',
+            'priority'=>'required|string|max:191',
+            'type'=>'required|string|max:191',
+            'due_date'=>'required|date',
         ]);
 
         if($validator->fails()){
@@ -57,44 +57,44 @@ class ProjectController extends Controller
                 'errors'=>$validator->messages()
             ],422);
         }else{
-            $project= Projet::create([
+            $task= Task::create([
                 'title'=>$request->title,
                 'description'=>$request->description,
-                'slug'=>$request->slug,
-                'status'=>$request->status,
-                'url'=>$request->url,
-            ]);
-
-            if($project){
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'Project created successfully',
-                ],200);
-            }else{
-                return response()->json([
-                    'status'=>500,
-                    'message'=>'Something went wrong'
-                ],500);
-            }
+                'priority'=>$request->priority,
+                'type'=>$request->type,
+                'due_date'=>$request->due_date,
+            ]); 
         }
-    }
+
+        if($task){
+            return response()->json([
+                'status'=>200,
+                'message'=>'Task created successfully',
+            ],200);
+        }else{
+            return response()->json([
+                'status'=>500,
+                'message'=>'Something went wrong'
+            ],500);
+        }
+}
 
     /**
      * Display the specified resource.
      */
-    public function show( $id)
+    public function show($id)
     {
-        $projet=Projet::find($id);
+        $task=Task::find($id);
 
-        if($projet){
+        if($task){
             return response()->json([
                 'status'=>200,
-                'message'=>$projet
+                'message'=>$task
             ],200);
         }else {
             return response()->json([
                 'status'=>404,
-                'message'=>'No such project found!'
+                'message'=>'No such task found!'
             ],404);
         }
     }
@@ -102,19 +102,19 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        $projet=Projet::find($id);
+        $task=Task::find($id);
 
-        if($projet){
+        if($task){
             return response()->json([
                 'status'=>200,
-                'message'=>$projet
+                'message'=>$task
             ],200);
         }else {
             return response()->json([
                 'status'=>404,
-                'message'=>'No such project found!'
+                'message'=>'No such task found!'
             ],404);
         }
     }
@@ -122,14 +122,14 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, string $id)
     {
         $validator=Validator::make($request->all(),[
             'title'=>'required|string|max:191',
             'description'=>'required|string|max:191',
-            'slug'=>'required|string|max:191',
-            'status'=>'required|string|max:191',
-            'url'=>'required|string|max:191',
+            'priority'=>'required|string|max:191',
+            'type'=>'required|string|max:191',
+            'due_date'=>'required|date',
         ]);
 
         if($validator->fails()){
@@ -138,27 +138,25 @@ class ProjectController extends Controller
                 'message'=>$validator->messages()
             ],422);
         }else{
-            $project=Projet::find($id);
+            $task=Task::find($id);
             
-
-            if($project){
-
-                $project->update([
+            if($task){
+                $task->update([
                     'title'=>$request->title,
                     'description'=>$request->description,
-                    'slug'=>$request->slug,
-                    'status'=>$request->status,
-                    'url'=>$request->url,
+                    'priority'=>$request->priority,
+                    'type'=>$request->type,
+                    'due_date'=>$request->due_date,
                 ]);
 
                 return response()->json([
                     'status'=>200,
-                    'message'=>'Project updated successfully',
+                    'message'=>'Task updated successfully',
                 ],200);
             }else{
                 return response()->json([
                     'status'=>404,
-                    'message'=>'No Such Project Found!'
+                    'message'=>'No Such Task Found!'
                 ],404);
             }
         }
@@ -167,25 +165,21 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
+    public function destroy(string $id)
     {
-        $project=Projet::find($id);
-        if($project){
-            $project->delete();
+        $task=Task::find($id);
+        if($task){
+            $task->delete();
             return response()->json([
                 'status'=>200,
-                'message'=>'Project deleted successfully!'
+                'message'=>'Task deleted successfully!'
             ],200);
 
         }else{
             return response()->json([
                 'status'=>404,
-                'message'=>'No Such Project Found!'
+                'message'=>'No Such Task Found!'
             ],404);
         }
-    }
-    public function delete(Request $request, $id)
-    {
-
     }
 }

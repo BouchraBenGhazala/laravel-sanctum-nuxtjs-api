@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class projet extends Model
+class task extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $table ='projets';
+
+    protected $table ='tasks';
     protected $fillable = [
-        'title',
-        'description',
-        'slug',
-        'status',
-        'url',
+        'title', 
+        'description', 
+        'priority',
+        'type',
+        'due_date'
     ];
 
 }
