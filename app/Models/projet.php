@@ -18,5 +18,14 @@ class projet extends Model
         'status',
         'url',
     ];
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function technologies()
+    {
+        return $this->belongsToMany(technologie::class,'technologie_projets');
+    }
 
 }

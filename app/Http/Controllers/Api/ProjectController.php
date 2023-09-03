@@ -43,7 +43,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $validator=Validator::make($request->all(),[
+        $validator=Validator::make($request->project,[
             'title'=>'required|string|max:191',
             'description'=>'required|string|max:191',
             'slug'=>'required|string|max:191',
@@ -57,13 +57,16 @@ class ProjectController extends Controller
                 'errors'=>$validator->messages()
             ],422);
         }else{
-            $project= Projet::create([
-                'title'=>$request->title,
-                'description'=>$request->description,
-                'slug'=>$request->slug,
-                'status'=>$request->status,
-                'url'=>$request->url,
+            $project = Projet::create([
+                'title'=>$request->project['title'],
+                'description'=>$request->project['description'],
+                'slug'=>$request->project['slug'],
+                'status'=>$request->project['status'],
+                'url'=>$request->project['url'],
             ]);
+
+            $project->technologies()->attach($request->selectedTechnologies);
+            
 
             if($project){
                 return response()->json([

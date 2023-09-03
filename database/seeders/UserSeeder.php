@@ -21,10 +21,10 @@ class UserSeeder extends Seeder
         //     'password' => bcrypt('password'),
         // ]);
 
-        // User::create([
-        //     'name' => 'Bouchra Benghazala',
-        //     'email' => 'bouchrabenghazala@gmail.com',
-        //     'password' => bcrypt('stage2023'),
-        // ]);
+        User::create([
+            'name' => 'Bouchra Benghazala',
+            'email' => 'bouchrabenghazala@gmail.com',
+            'password' => bcrypt('stage2023'),
+        ]);
     }
 }

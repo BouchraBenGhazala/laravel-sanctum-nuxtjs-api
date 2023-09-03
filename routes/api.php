@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TechnologieController;
+use App\Http\Controllers\Api\TechnologieProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +45,17 @@ Route::get('/tasks/{id}',[TaskController::class,'show'] );
 Route::get('/tasks/{id}/edit',[TaskController::class,'edit'] );
 Route::put('/tasks/{id}/update',[TaskController::class,'update'] );
 Route::delete('/tasks/{id}/delete',[TaskController::class,'destroy'] );
+
+Route::get('/technologies',[TechnologieController::class,'index'] );
+Route::post('/technologies',[TechnologieController::class,'store'] );
+Route::get('/technologies/{id}',[TechnologieController::class,'show'] );
+Route::get('/technologies/{id}/edit',[TechnologieController::class,'edit'] );
+Route::put('/technologies/{id}/update',[TechnologieController::class,'update'] );
+Route::delete('/technologies/{id}/delete',[TechnologieController::class,'destroy'] );
+
+
+Route::get('/roles',[RoleController::class,'index'] );
+
 
 Route::post('/login',[AuthController::class,'login'] );
 Route::post('/logout',[AuthController::class,'logout'] );

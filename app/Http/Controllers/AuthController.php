@@ -31,17 +31,23 @@ class AuthController extends Controller
         'name'=>'required|string|between:2,100',
         'email'=>'required|string|max:100|unique:users',
         'password'=>'required|string|min:6',
+        'role_id' => 'required|exists:roles,id', // Validate the selected role exists in the roles table
     ]);
 
     if($validator->fails()){
         return response()->json([
-            'message'=>$validator->errors()->first()
+            'status'=>401,
+            'message'=>$validator->errors()->all()
         ],401);
     }else{
       $user=User::create(array_merge(
         $validator->validated(),
         ['password' => bcrypt($request->password)]
       ));
+
+      // Attach the selected role to the user
+    //   $user->roles()->attach($request->id_role);
+      
     }
                
     if($user){
@@ -66,7 +72,8 @@ class AuthController extends Controller
 
         public function index()
         {
-            $user=User::all();
+            // $user=User::all();
+            $user = User::with('role')->get(); // Eager load the role relationship
             if($user->count()>0){
                 return response()->json([
                     'status'=>200,
@@ -79,6 +86,11 @@ class AuthController extends Controller
                     'message'=>'No records Found'
                 ],404);
             }
+        }
+
+        public function create(Request $request)
+        {
+
         }
 
         public function store(Request $request)
@@ -139,6 +151,7 @@ class AuthController extends Controller
                 'name'=>'required|string|max:191',
                 'email'=>'required|string|max:191',
                 'password'=>'required|string|max:191',
+                'role_id'=>'required',
             ]);
     
             if($validator->fails()){
@@ -156,6 +169,7 @@ class AuthController extends Controller
                         'name'=>$request->name,
                         'email'=>$request->email,
                         'password'=>$request->password,
+                        'role_id'=>$request->role_id,
               
                     ]);
     

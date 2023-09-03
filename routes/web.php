@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//for email verification
+// Auth::routes([
+//     'verify'=>true,
+// ]);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -26,3 +31,7 @@ Route::get('/dbconnect',function(){
 });
 
 
+
+// Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
