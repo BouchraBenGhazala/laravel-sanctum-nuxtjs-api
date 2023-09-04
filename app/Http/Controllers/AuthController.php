@@ -15,6 +15,7 @@ class AuthController extends Controller
                 'message' => 'Invalid login details'
             ], 401);
         }
+    
     $request->session()->regenerate();
     }
 
@@ -45,8 +46,9 @@ class AuthController extends Controller
         ['password' => bcrypt($request->password)]
       ));
 
-      // Attach the selected role to the user
-    //   $user->roles()->attach($request->id_role);
+    //for email verification
+    $user->sendEmailVerificationNotification();
+
       
     }
                

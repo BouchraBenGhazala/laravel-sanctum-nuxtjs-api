@@ -18,11 +18,11 @@ Route::get('/', function () {
 });
 
 //for email verification
-// Auth::routes([
-//     'verify'=>true,
-// ]);
+Auth::routes([
+    'verify'=>true,
+]);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('verified');
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
