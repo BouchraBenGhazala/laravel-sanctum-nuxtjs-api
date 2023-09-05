@@ -22,7 +22,7 @@ Auth::routes([
     'verify'=>true,
 ]);
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('verified');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 

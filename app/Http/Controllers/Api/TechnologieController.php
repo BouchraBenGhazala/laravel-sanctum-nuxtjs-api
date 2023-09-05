@@ -14,7 +14,7 @@ class TechnologieController extends Controller
      */
     public function index()
     {
-        $technologie=Technologie::all();
+        $technologie=Technologie::with('projets')->get();
         // $technologie =Technologie::with('project')->get(); // Eager load the role relationship
         if($technologie->count()>0){
             return response()->json([

@@ -15,7 +15,7 @@ class ProjectController extends Controller
   
     public function index()
     {
-        $project=Projet::all();
+        $project=Projet::with('technologies')->get(); 
         if($project->count()>0){
             return response()->json([
                 'status'=>200,
