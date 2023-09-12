@@ -12,21 +12,21 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-  
+
     public function index()
     {
-        $project=Projet::with('technologies')->get(); 
-        if($project->count()>0){
+        $project = Projet::with('technologies')->get();
+        if ($project->count() > 0) {
             return response()->json([
-                'status'=>200,
-                'message'=>$project
+                'status' => 200,
+                'message' => $project
 
-            ],200);
-        }else{
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'No records Found'
-            ],404);
+                'status' => 404,
+                'message' => 'No records Found'
+            ], 404);
         }
     }
 
@@ -43,41 +43,41 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $validator=Validator::make($request->project,[
-            'title'=>'required|string|max:191',
-            'description'=>'required|string|max:191',
-            'slug'=>'required|string|max:191',
-            'status'=>'required|string|max:191',
-            'url'=>'required|string|max:191',
+        $validator = Validator::make($request->project, [
+            'title' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'slug' => 'required|string|max:191',
+            'status' => 'required|string|max:191',
+            'url' => 'required|string|max:191',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>422,
-                'errors'=>$validator->messages()
-            ],422);
-        }else{
+                'status' => 422,
+                'errors' => $validator->messages()
+            ], 422);
+        } else {
             $project = Projet::create([
-                'title'=>$request->project['title'],
-                'description'=>$request->project['description'],
-                'slug'=>$request->project['slug'],
-                'status'=>$request->project['status'],
-                'url'=>$request->project['url'],
+                'title' => $request->project['title'],
+                'description' => $request->project['description'],
+                'slug' => $request->project['slug'],
+                'status' => $request->project['status'],
+                'url' => $request->project['url'],
             ]);
 
             $project->technologies()->attach($request->selectedTechnologies);
-            
 
-            if($project){
+
+            if ($project) {
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Project created successfully',
-                ],200);
-            }else{
+                    'status' => 200,
+                    'message' => 'Project created successfully',
+                ], 200);
+            } else {
                 return response()->json([
-                    'status'=>500,
-                    'message'=>'Something went wrong'
-                ],500);
+                    'status' => 500,
+                    'message' => 'Something went wrong'
+                ], 500);
             }
         }
     }
@@ -85,20 +85,20 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show( $id)
+    public function show($id)
     {
-        $projet=Projet::find($id);
+        $projet = Projet::find($id);
 
-        if($projet){
+        if ($projet) {
             return response()->json([
-                'status'=>200,
-                'message'=>$projet
-            ],200);
-        }else {
+                'status' => 200,
+                'message' => $projet
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'No such project found!'
-            ],404);
+                'status' => 404,
+                'message' => 'No such project found!'
+            ], 404);
         }
     }
 
@@ -107,18 +107,18 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $projet=Projet::find($id);
+        $projet = Projet::find($id);
 
-        if($projet){
+        if ($projet) {
             return response()->json([
-                'status'=>200,
-                'message'=>$projet
-            ],200);
-        }else {
+                'status' => 200,
+                'message' => $projet
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'No such project found!'
-            ],404);
+                'status' => 404,
+                'message' => 'No such project found!'
+            ], 404);
         }
     }
 
@@ -127,42 +127,44 @@ class ProjectController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $validator=Validator::make($request->all(),[
-            'title'=>'required|string|max:191',
-            'description'=>'required|string|max:191',
-            'slug'=>'required|string|max:191',
-            'status'=>'required|string|max:191',
-            'url'=>'required|string|max:191',
+        $validator = Validator::make($request->project, [
+            'title' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'slug' => 'required|string|max:191',
+            'status' => 'required|string|max:191',
+            'url' => 'required|string|max:191',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>422,
-                'message'=>$validator->messages()
-            ],422);
-        }else{
-            $project=Projet::find($id);
-            
+                'status' => 422,
+                'message' => $validator->messages()
+            ], 422);
+        } else {
+            $project = Projet::find($id);
 
-            if($project){
+
+            if ($project) {
 
                 $project->update([
-                    'title'=>$request->title,
-                    'description'=>$request->description,
-                    'slug'=>$request->slug,
-                    'status'=>$request->status,
-                    'url'=>$request->url,
+                    'title' => $request->project['title'],
+                    'description' => $request->project['description'],
+                    'slug' => $request->project['slug'],
+                    'status' => $request->project['status'],
+                    'url' => $request->project['url'],
                 ]);
 
+                $project->technologies()->sync($request->selectedTechnologies);
+
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Project updated successfully',
-                ],200);
-            }else{
+                    'status' => 200,
+                    'message' => 'Project updated successfully',
+                ], 200);
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'No Such Project Found!'
-                ],404);
+                    'status' => 404,
+                    'message' => 'No Such Project Found!'
+                ], 404);
             }
         }
     }
@@ -170,21 +172,21 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
-        $project=Projet::find($id);
-        if($project){
+        $project = Projet::find($id);
+        if ($project) {
             $project->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Project deleted successfully!'
-            ],200);
+                'status' => 200,
+                'message' => 'Project deleted successfully!'
+            ], 200);
 
-        }else{
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'No Such Project Found!'
-            ],404);
+                'status' => 404,
+                'message' => 'No Such Project Found!'
+            ], 404);
         }
     }
     public function delete(Request $request, $id)

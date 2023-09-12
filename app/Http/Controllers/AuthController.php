@@ -208,4 +208,50 @@ class AuthController extends Controller
                 ],404);
             }
         }
+
+        public function updateProfile(Request $request, int $id)
+        {
+            $validator=Validator::make($request->all(),[
+                'name'=>'required|string|max:191',
+                'birthday'=>'',
+                'phone_number'=>'string|max:10|min:10',
+                'sexe'=>'string|min:1',
+                'picture'=>'max:100',
+    
+            ]);
+    
+            if($validator->fails()){
+                return response()->json([
+                    'status'=>422,
+                    'message'=>$validator->messages()
+                ],422);
+            }else{
+                $user=User::find($id);
+                
+    
+                if($user){
+    
+                    $user->update([
+                        'name'=>$request->name,
+                        'birthday'=>$request->birthday,
+                        'phone_number'=>$request->phone_number,
+                        'sexe'=>$request->sexe,
+                        'picture'=>$request->picture,
+ 
+                        // 'role_id'=>$request->role_id,
+              
+                    ]);
+    
+                    return response()->json([
+                        'status'=>200,
+                        'message'=>'Profile updated successfully',
+                    ],200);
+                }else{
+                    return response()->json([
+                        'status'=>404,
+                        'message'=>'Error occured!'
+                    ],404);
+                }
+            }
+        }
 }
